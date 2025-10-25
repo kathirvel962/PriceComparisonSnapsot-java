@@ -12,7 +12,8 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import lombok.Data;
 
-
+@Entity
+@Data
 public class priceEntries {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY )
@@ -24,3 +25,4 @@ public class priceEntries {
 
     
 }
+

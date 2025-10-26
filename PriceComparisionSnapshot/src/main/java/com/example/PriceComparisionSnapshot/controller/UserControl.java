@@ -1,44 +1,37 @@
 package com.example.PriceComparisionSnapshot.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.example.PriceComparisionSnapshot.entity.user;
-import com.example.PriceComparisionSnapshot.services.UserServices;  
-@Controller
+import com.example.PriceComparisionSnapshot.services.UserServices;
+
+@RestController
 @RequestMapping("/users")
 public class UserControl {
 
-	@Autowired
-	private UserServices userServices;
+    @Autowired
+    private UserServices userServices;
 
-	@GetMapping
-	public String listUsers(Model model) {
-		model.addAttribute("users", userServices.getAllUsers());
-		return "users";
-	}
+    @GetMapping
+    public ResponseEntity<?> listUsers() {
+        return ResponseEntity.ok(userServices.getAllUsers());
+    }
 
-	@GetMapping("/add")
-	public String showAddForm(Model model) {
-		model.addAttribute("user", new user());
-		return "add-user";
-	}
+    @PostMapping
+    public ResponseEntity<?> createUser(@RequestBody user user) {
+        return ResponseEntity.ok(userServices.createUser(user));
+    }
 
-	@PostMapping
-	public String saveUser(@ModelAttribute user user) {
-		userServices.createUser(user);
-		return "redirect:/users";
-	}
-
-	@GetMapping("/edit/{id}")
-	public String showEditForm(@PathVariable Long id, Model model) {
-		model.addAttribute("user", userServices.getUserById(id));
-		return "edit-user";
-	}
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getUser(@PathVariable Long id) {
+        return ResponseEntity.ok(userServices.getUserById(id));
+    }
 
 }
